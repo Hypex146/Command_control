@@ -1,0 +1,27 @@
+name: Command_control
+version: 0.0.1
+author: Hypex
+main: plugin.CommandСontrol
+api-version: 1.18
+depend: []
+commands:
+   command_control:
+      description: Commands related to the plugin core
+      aliases: cmdc
+#      permission: eternal_ice.admin
+#      permission-message: You do not have permission <permission>
+#      usage: Syntax error! Perhaps you meant /<command> reload?
+permissions:
+   eternal_ice.*:
+      description: Access to all plugin commands
+      default: false
+      children:
+         eternal_ice.admin: true
+   eternal_ice.admin:
+      description: Administrator access (all commands)
+      default: false
+      children:
+         eternal_ice.user: true
+   eternal_ice.user:
+      description: Player access (part of the commands)
+      default: false
