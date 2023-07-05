@@ -28,14 +28,14 @@ public class CCConfigurator {
 		File folderFile = configFile.getParentFile();
 		if (!folderFile.exists()) {
 			folderFile.mkdirs();
-			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.INFO, "Ñîçäàíà ïàïêà: " + folderFile.getAbsolutePath());
+			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.INFO, "Folder created: " + folderFile.getAbsolutePath());
 		}
 		if (!configFile.exists()) {
 			try {
 				configFile.createNewFile();
-				main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.INFO, "Ñîçäàí ôàéë: " + configFile.getAbsolutePath());
+				main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.INFO, "File created: " + configFile.getAbsolutePath());
 			} catch (IOException e) {
-				main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, "Íå óäàëîñü ñîçäàòü ôàéë (IOException): "
+				main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, "Error creating configuration file (IOException): "
 						+configFile.getAbsolutePath());
 				e.printStackTrace();
 				return null;
@@ -44,22 +44,22 @@ public class CCConfigurator {
 		YamlConfiguration customConfig = new YamlConfiguration();
 		try {
 			customConfig.load(configFile);
-			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.INFO, "Ñ÷èòàí ôàéë: " + configFile.getAbsolutePath());
+			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.INFO, "The configuration file is loaded: " + configFile.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, "Íå óäàëîñü ñ÷èòàòü ôàéë (FileNotFoundException): "
+			main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, "Error loading configuration file (FileNotFoundException): "
 					+configFile.getAbsolutePath());
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
-			main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, "Íå óäàëîñü ñ÷èòàòü ôàéë (IOException): "
+			main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, "Error loading configuration file (IOException): "
 					+configFile.getAbsolutePath());
 			e.printStackTrace();
 			return null;
 		} catch (InvalidConfigurationException e) {
 			e.printStackTrace();
-			main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, "Íå óäàëîñü ñ÷èòàòü ôàéë (InvalidConfigurationException): "
+			main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, "Error loading configuration file (InvalidConfigurationException): "
 					+configFile.getAbsolutePath());
 			e.printStackTrace();
 			return null;
@@ -71,11 +71,11 @@ public class CCConfigurator {
 		File configFile = new File(main_plugin_.getDataFolder()+"/"+pathToFile);
 		try {
 			configToSave.save(configFile);
-			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.INFO, "Ñîõðàí¸í ôàéë: "+configFile.getAbsolutePath());
+			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.INFO, "The configuration file is saved: "+configFile.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
-			main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE, 
-					"Íå óäàëîñü ñîõðàíèòü ôàéë: (IOException) "+configFile.getAbsolutePath());
+			main_plugin_.getCCLogger().log(LogLevel.MINIMAL, Level.SEVERE,
+					"Error saving the configuration file: (IOException) "+configFile.getAbsolutePath());
 			e.printStackTrace();
 			return -1;
 		}
@@ -85,10 +85,10 @@ public class CCConfigurator {
 	public boolean getBoolean(ConfigurationSection config, String field, boolean defaultValue) {
 		if (!config.isBoolean(field)) {
 			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-					"Íåâåðíî âûñòàâëåíî ïîëå \"" + field + "\" â êîíôèãå");
+					"In the field with the name \"" + field + "\" incorrect value is set (not boolean)");
 			config.set(field, defaultValue);
 			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-					"Ïîëå \"" + field + "\" óñòàíîâëåíî ïî óìîë÷àíèþ");
+					"In the field with the name \"" + field + "\" the default value is set");
 		}
 		return config.getBoolean(field);
 	}
@@ -100,13 +100,11 @@ public class CCConfigurator {
 	public int getInt(ConfigurationSection config, String field, int defaultValue) {
 		if (!config.isInt(field)) {
 			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-					"Íåâåðíî âûñòàâëåíî ïîëå \"" + field + "\" â êîíôèãå");
+					"In the field with the name \"" + field + "\" incorrect value is set (not int)");
 			config.set(field, defaultValue);
 			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-					"Ïîëå \"" + field + "\" óñòàíîâëåíî ïî óìîë÷àíèþ");
+					"In the field with the name \"" + field + "\" the default value is set");
 		}
-		main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-				"Ïîëå \"" + field + "\" óñòàíîâëåíî êàê ïîëàãàåòñÿ");
 		return config.getInt(field);
 	}
 	
@@ -117,10 +115,10 @@ public class CCConfigurator {
 	public String getString(ConfigurationSection config, String field, String defaultValue) {
 		if (!config.isString(field)) {
 			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-					"Íåâåðíî âûñòàâëåíî ïîëå \"" + field + "\" â êîíôèãå");
+					"In the field with the name \"" + field + "\" incorrect value is set (not string)");
 			config.set(field, defaultValue);
 			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-					"Ïîëå \"" + field + "\" óñòàíîâëåíî ïî óìîë÷àíèþ");
+					"In the field with the name \"" + field + "\" the default value is set");
 		}
 		return config.getString(field);
 	}
@@ -132,10 +130,10 @@ public class CCConfigurator {
 	public double getDouble(ConfigurationSection config, String field, double defaultValue) {
 		if (!config.isDouble(field)) {
 			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-					"Íåâåðíî âûñòàâëåíî ïîëå \"" + field + "\" â êîíôèãå");
+					"In the field with the name \"" + field + "\" incorrect value is set (not double)");
 			config.set(field, defaultValue);
 			main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-					"Ïîëå \"" + field + "\" óñòàíîâëåíî ïî óìîë÷àíèþ");
+					"In the field with the name \"" + field + "\" the default value is set");
 		}
 		return config.getDouble(field);
 	}
@@ -151,10 +149,10 @@ public class CCConfigurator {
 			return stringList;
 		}
 		main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-				"Íåâåðíî âûñòàâëåíî ïîëå \"" + field + "\" â êîíôèãå");
+				"In the field with the name \"" + field + "\" incorrect value is set (not string list)");
 		config.set(field, stringList);
 		main_plugin_.getCCLogger().log(LogLevel.DEBUG, Level.WARNING, 
-				"Ïîëå \"" + field + "\" óñòàíîâëåíî ïî óìîë÷àíèþ");
+				"In the field with the name \"" + field + "\" the default value is set");
 		return stringList;
 	}
 	

@@ -6,6 +6,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import plugin.commands.MainCommand;
+import plugin.listeners.CommandEventListener;
+import plugin.managers.CommandManager;
 import plugin.utilities.CCConfigurator;
 import plugin.utilities.CCLogger;
 import plugin.utilities.LogLevel;
@@ -14,6 +17,7 @@ public class CommandСontrol extends JavaPlugin{
 	private FileConfiguration config_;
 	private CCConfigurator configurator_;
 	private CCLogger logger_;
+	private CommandManager command_manager_;
 	// configuration
 	private boolean enable_;
 	private boolean enable_greeting_;
@@ -23,6 +27,7 @@ public class CommandСontrol extends JavaPlugin{
 	public CommandСontrol() {
 		configurator_=  new CCConfigurator(this);
 		logger_ = new CCLogger(this, LogLevel.STANDART);
+		command_manager_ = new CommandManager(this);
 	}
 	
 	public String getPluginName() {
@@ -41,14 +46,19 @@ public class CommandСontrol extends JavaPlugin{
 		return logger_;
 	}
 	
-	public void loadConfig() {
+	public CommandManager getCommandManager() {
+		return command_manager_;
+	}
+	
+	public void loadFullConfig() {
 		saveDefaultConfig();
 		reloadConfig();
-		updateParams();
+		loadMainParams();
+		command_manager_.loadConfig();
 		saveConfig();
 	}
 	
-	public void updateParams() {
+	private void loadMainParams() {
 		config_ = getConfig();
 		ConfigurationSection main_section = configurator_.getConfigurationSection(config_, "Main_settings");
 		LogLevel log_level = LogLevel.toEnum(configurator_.getString(main_section, 
@@ -63,14 +73,14 @@ public class CommandСontrol extends JavaPlugin{
 	}
 	
 	public boolean checkEnableStatus() {
-		logger_.log(LogLevel.DEBUG, Level.INFO, "Ïðîâåðÿåì íå îòêëþ÷¸í ëè ïëàãèí â êîíôèãå");
+		logger_.log(LogLevel.DEBUG, Level.INFO, "Checking whether the plugin should work.");
 		if (enable_ == true) { 
-			logger_.log(LogLevel.DEBUG, Level.INFO, "Ïëàãèí íå îòêëþ÷¸í â êîíôèãå");
+			logger_.log(LogLevel.DEBUG, Level.INFO, "The plugin should work");
 			return true; 
 			}
-		logger_.log(LogLevel.DEBUG, Level.INFO, "Ïëàãèí îòêëþ÷¸í â êîíôèãå");
+		logger_.log(LogLevel.DEBUG, Level.INFO, "The plugin should not work. Disabling the plugin.");
 		getServer().getPluginManager().disablePlugin(this);
-		logger_.log(LogLevel.STANDART, Level.INFO, "Ïëàãèí áûë îòêëþ÷¸í");
+		logger_.log(LogLevel.STANDART, Level.INFO, "The plugin is disabled.");
 		return false;
 	}
 	
@@ -87,9 +97,11 @@ public class CommandСontrol extends JavaPlugin{
 	
 	@Override
 	public void onEnable() {
-		loadConfig();
+		loadFullConfig();
 		if (!checkEnableStatus()) { return; }
 		if (enable_greeting_) { printGreetingInConsole(); }
+		getCommand("command_control").setExecutor(new MainCommand(this));
+		getServer().getPluginManager().registerEvents(new CommandEventListener(this), this);
 	}
 	
 }
